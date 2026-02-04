@@ -4,6 +4,7 @@ import MovieSelect from "./components/MovieSelect";
 import SeatGrid from "./components/SeatGrid";
 import BookingSummary from "./components/BookingSummary";
 import { getMovies } from "./services/MovieService";
+import BookingForm from "./components/BookingForm";
 import './App.css'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [ticketPrice, setTicketPrice] = useState(0);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     async function loadMovies() {
@@ -21,8 +23,11 @@ function App() {
     loadMovies();
   }, []);
 
+
   return (
     <>
+    <h1>Movie Seat Booking</h1>
+
     <MovieSelect movies={movies} onChange={setTicketPrice} />
     <SeatGrid
     selectedSeats={selectedSeats}
@@ -32,6 +37,17 @@ function App() {
     count={selectedSeats.length}
     total={selectedSeats.length * ticketPrice}
     />
+
+    {selectedSeats.length > 0 && (
+      <button onClick={() => setShowForm(true)}>Boka</button>
+    )}
+
+    {showForm && (
+      <BookingForm
+      onClose={() => setShowForm(false)}
+      selectedSeats={selectedSeats}
+      />
+    )}
     </>
   )
 }
